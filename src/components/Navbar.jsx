@@ -2,6 +2,7 @@ import { Link, NavLink } from 'react-router'
 import { Bell, LogOut, Menu, User } from 'lucide-react'
 import { useContext, useState } from 'react'
 import { AuthContext } from '../provider/AuthProvider'
+import logo from '../assets/logo.png'
 // import defaultAvatar from '../assets/default-avatar.png'
 
 const Navbar = () => {
@@ -21,7 +22,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
                
                 <Link to="/" className="flex items-center gap-2 text-xl font-bold text-purple-700">
-                    <img src="/logo.png" alt="Logo" className="w-8 h-8" />
+                    <img src={logo} alt="Logo" className="w-12 h-12" />
                     MealNest
                 </Link>
 
