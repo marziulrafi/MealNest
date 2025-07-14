@@ -7,6 +7,7 @@ import MealDetails from '../pages/MealDetails';
 import PrivateRoutes from './PrivateRoutes'
 import DashboardLayout from '../layouts/DashboardLayout';
 import MyProfile from '../user/MyProfile';
+import Checkout from '../pages/Checkout';
 
 
 const router = createBrowserRouter([
@@ -25,8 +26,8 @@ const router = createBrowserRouter([
         path: '/dashboard',
         element: <PrivateRoutes><DashboardLayout /></PrivateRoutes>,
         children: [
-            
-           
+            { path: 'profile', element: <MyProfile /> },
+
         ]
     }
 ]);
