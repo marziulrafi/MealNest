@@ -1,17 +1,18 @@
-
 import { Tab } from '@headlessui/react'
 import { useForm } from 'react-hook-form'
 import { useContext } from 'react'
 import { AuthContext } from '../provider/AuthProvider'
 import toast from 'react-hot-toast'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 const Authentication = () => {
-    const { createUser, signIn, googleSignIn, updateUserProfile } = useContext(AuthContext)
+    const { createUser, loginUser, googleSignIn, updateUserProfile } = useContext(AuthContext)
+    const navigate = useNavigate();
 
     const {
         register: reg,
@@ -24,6 +25,7 @@ const Authentication = () => {
         handleSubmit: handleLogin,
         reset: resetLog,
     } = useForm()
+
 
     const onRegister = (data) => {
         createUser(data.email, data.password)
@@ -42,18 +44,22 @@ const Authentication = () => {
                 })
                 toast.success('Registration successful!')
                 resetReg()
+                navigate('/')
             })
             .catch((err) => toast.error(err.message))
     }
 
+
     const onLogin = (data) => {
-        signIn(data.email, data.password)
+        loginUser(data.email, data.password)
             .then(() => {
                 toast.success('Login successful!')
                 resetLog()
+                navigate('/')
             })
             .catch((err) => toast.error(err.message))
     }
+
 
     const handleGoogle = () => {
         googleSignIn().then((result) => {
@@ -70,8 +76,10 @@ const Authentication = () => {
                 }),
             })
             toast.success('Logged in with Google!')
+            navigate('/') 
         })
     }
+
 
     return (
         <div className="max-w-md mx-auto mt-10 px-4">
@@ -93,7 +101,7 @@ const Authentication = () => {
                 </Tab.List>
 
                 <Tab.Panels>
-                   
+
                     <Tab.Panel>
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -152,6 +160,8 @@ const Authentication = () => {
             </Tab.Group>
         </div>
     )
+
+
 }
 
 export default Authentication;
