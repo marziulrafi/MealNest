@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RequestedMeals = () => {
+const AdminProfile = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const RequestedMeals = () => {
     );
 };
 
-export default RequestedMeals;
+export default AdminProfile;

@@ -6,8 +6,12 @@ import Meals from '../pages/Meals';
 import MealDetails from '../pages/MealDetails';
 import PrivateRoutes from './PrivateRoutes'
 import DashboardLayout from '../layouts/DashboardLayout';
-import MyProfile from '../user/MyProfile';
+import MyProfile from '../student/MyProfile';
 import Checkout from '../pages/Checkout';
+import AdminRoute from './AdminRoute';
+import AdminDashboard from '../layouts/AdminDashboard';
+import AdminProfile from '../admin/AdminProfile';
+import RequestedMeals from '../student/RequestedMeals';
 
 
 const router = createBrowserRouter([
@@ -27,9 +31,11 @@ const router = createBrowserRouter([
         element: <PrivateRoutes><DashboardLayout /></PrivateRoutes>,
         children: [
             { path: 'profile', element: <MyProfile /> },
+            { path: 'requests', element: <RequestedMeals /> }
 
         ]
-    }
+    },
+
 ]);
 
 export default router;
