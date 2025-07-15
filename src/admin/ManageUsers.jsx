@@ -9,18 +9,19 @@ const ManageUsers = () => {
     const { data: users = [], isLoading } = useQuery({
         queryKey: ['users', search],
         queryFn: async () => {
-            const res = await axios.get(`http://localhost:3000/users?search=${search}`);
+            const url = search.length >= 2
+                ? `http://localhost:3000/users?search=${search}`
+                : `http://localhost:3000/users`;
+            const res = await axios.get(url);
             return res.data;
-        },
-        enabled: search.length >= 2,
+        }
     });
 
     const { mutate, isLoading: isMutating } = useMutation({
-        mutationFn: (email) =>
-            axios.patch(`http://localhost:3000/admin/users/${email}/make-admin`),
+        mutationFn: (email) => axios.patch(`http://localhost:3000/users/${email}/make-admin`),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
-        },
+        }
     });
 
     return (
@@ -44,8 +45,8 @@ const ManageUsers = () => {
                             <tr>
                                 <th className="px-4 py-3 text-left">Name</th>
                                 <th className="px-4 py-3 text-left">Email</th>
-                                <th className="px-4 py-3">Role</th>
-                                <th className="px-4 py-3">Action</th>
+                                <th className="px-4 py-3 text-center">Role</th>
+                                <th className="px-4 py-3 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>

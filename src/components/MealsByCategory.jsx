@@ -67,7 +67,7 @@ const MealsByCategory = () => {
                                         Price: ৳{meal.price}
                                     </p>
                                     <button
-                                        onClick={() => navigate(`/meal/${meal._id}`)}
+                                        onClick={() => navigate(`/meals/${meal._id}`)}
                                         className="text-purple-600 hover:underline"
                                     >
                                         View Details →

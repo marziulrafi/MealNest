@@ -13,7 +13,7 @@ const MealCard = ({ meal, onLike, onRequest }) => {
                 <button onClick={() => onRequest(meal)} className="text-purple-600">Request</button>
             </div>
             <button
-                onClick={() => navigate(`/meal/${meal._id}`)}
+                onClick={() => navigate(`/meals/${meal._id}`)}
                 className="text-purple-600 mt-2 block hover:underline"
             >
                 View Details →
