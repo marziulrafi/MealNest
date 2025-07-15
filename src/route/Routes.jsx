@@ -14,6 +14,8 @@ import AdminProfile from '../admin/AdminProfile';
 import RequestedMeals from '../student/RequestedMeals';
 import ManageUsers from '../admin/ManageUsers';
 import AddMeal from '../admin/AddMeal';
+import AllMeals from '../admin/AllMeals';
+import ServeMeal from '../admin/ServeMeal';
 
 
 const router = createBrowserRouter([
@@ -45,6 +47,8 @@ const router = createBrowserRouter([
             { path: 'profile', element: <AdminProfile /> },
             { path: 'manage-users', element: <ManageUsers /> },
             { path: 'add-meal', element: <AddMeal /> },
+            { path: 'all-meals', element: <AllMeals /> },
+            { path: 'serve-meal', element: <ServeMeal /> },
 
         ]
     }

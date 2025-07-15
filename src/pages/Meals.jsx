@@ -1,83 +1,113 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import MealCard from '../components/MealCard'
-import { useMeals } from '../hooks/useMeals'
 import Loading from '../components/Loading'
 
+const PAGE_SIZE = 6
+
 const Meals = () => {
-    const [search, setSearch] = useState('')
-    const [category, setCategory] = useState('')
-    const [priceRange, setPriceRange] = useState([0, 1000])
+    const [meals, setMeals] = useState([])
+    const [hasMore, setHasMore] = useState(true)
+    const [page, setPage] = useState(0)
 
-    const filters = {
-        search,
-        category,
-        minPrice: priceRange[0],
-        maxPrice: priceRange[1],
+    const [filters, setFilters] = useState({
+        search: '',
+        category: '',
+        min: '',
+        max: '',
+    })
+
+    const fetchMeals = async () => {
+        const params = {
+            skip: page * PAGE_SIZE,
+            limit: PAGE_SIZE,
+            ...filters,
+        }
+        const { data } = await axios.get('http://localhost:3000/meals', { params })
+        if (data.length < PAGE_SIZE) setHasMore(false)
+        setMeals(prev => [...prev, ...data])
     }
 
-    const { data, fetchNextPage, hasNextPage } = useMeals(filters)
+    useEffect(() => {
+        setMeals([])
+        setPage(0)
+        setHasMore(true)
+    }, [filters])
 
-    const allMeals = data?.pages.flatMap(page => page.meals) || []
+    useEffect(() => {
+        fetchMeals()
+    }, [page, filters])
 
-    const handleLike = async (id) => {
-        await fetch(`http://localhost:3000/meals/like/${id}`, { method: 'PATCH' })
+    const handleLoadMore = () => {
+        setPage(prev => prev + 1)
     }
 
-    const handleRequest = async (meal) => {
-        await fetch('http://localhost:3000/requests', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mealId: meal._id, status: 'pending' })
-        })
+    const handleFilterChange = e => {
+        setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
     return (
-        <div className="max-w-6xl mx-auto p-4">
-            <div className="flex gap-4 mb-6">
+        <div className="max-w-6xl mx-auto py-8 px-4">
+            <div className="grid gap-4 md:grid-cols-4 mb-6">
                 <input
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search meals..."
-                    className="border px-3 py-1 rounded"
+                    name="search"
+                    value={filters.search}
+                    onChange={handleFilterChange}
+                    placeholder="🔍 Search meals..."
+                    className="border px-3 py-2 rounded"
                 />
-                <select onChange={(e) => setCategory(e.target.value)} className="border px-3 py-1 rounded">
-                    <option value="">All</option>
-                    <option value="veg">Veg</option>
-                    <option value="non-veg">Non-Veg</option>
+                <select
+                    name="category"
+                    value={filters.category}
+                    onChange={handleFilterChange}
+                    className="border px-3 py-2 rounded"
+                >
+                    <option value="">All Categories</option>
+                    <option>Breakfast</option>
+                    <option>Lunch</option>
+                    <option>Dinner</option>
                 </select>
                 <input
-                    type="range"
-                    min={0}
-                    max={1000}
-                    step={50}
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([0, Number(e.target.value)])}
+                    name="min"
+                    type="number"
+                    placeholder="Min Price"
+                    value={filters.min}
+                    onChange={handleFilterChange}
+                    className="border px-3 py-2 rounded"
                 />
-                <span className="text-sm">Max: ${priceRange[1]}</span>
+                <input
+                    name="max"
+                    type="number"
+                    placeholder="Max Price"
+                    value={filters.max}
+                    onChange={handleFilterChange}
+                    className="border px-3 py-2 rounded"
+                />
             </div>
 
             <InfiniteScroll
-                dataLength={allMeals.length}
-                next={fetchNextPage}
-                hasMore={hasNextPage}
-                loader={<Loading/>}
+                dataLength={meals.length}
+                next={handleLoadMore}
+                hasMore={hasMore}
+                loader={<Loading />}
             >
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {allMeals.map(meal => (
-                        meal?._id && (
-                            <MealCard
-                                key={meal._id}
-                                meal={meal}
-                                onLike={handleLike}
-                                onRequest={handleRequest}
-                            />
-                        )
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {meals.map(m => (
+                        <div key={m._id} className="bg-white rounded shadow overflow-hidden">
+                            <img src={m.image} alt={m.title} className="h-48 w-full object-cover" />
+                            <div className="p-4">
+                                <h3 className="font-semibold text-lg mb-1">{m.title}</h3>
+                                <p className="text-gray-600">${m.price.toFixed(2)}</p>
+                                <p className="text-sm text-gray-500 mt-2 line-clamp-2">{m.description}</p>
+                            </div>
+                        </div>
                     ))}
-
                 </div>
             </InfiniteScroll>
+
+            {!meals.length && !hasMore && (
+                <p className="text-center py-8 text-gray-500">No meals found.</p>
+            )}
         </div>
     )
 }

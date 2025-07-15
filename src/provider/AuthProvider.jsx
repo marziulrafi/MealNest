@@ -50,23 +50,30 @@ const AuthProvider = ({ children }) => {
     }
 
 
-    const fetchDbUser = async (email) => {
+    const fetchDbUser = async () => {
         try {
-            const res = await fetch(`http://localhost:3000/users/${email}`)
-            const data = await res.json()
-            setDbUser(data)
+            const token = await auth.currentUser.getIdToken();
+            const res = await fetch('http://localhost:3000/users/me', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (!res.ok) throw new Error('Failed to fetch user');
+            const data = await res.json();
+            setDbUser(data);
         } catch (err) {
-            console.error('Error fetching dbUser:', err)
-            setDbUser(null)
+            console.error('Error fetching dbUser:', err);
+            setDbUser(null);
         }
-    }
+    };
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
             setLoading(false)
-            if (currentUser?.email) {
-                fetchDbUser(currentUser.email)
+            if (currentUser) {
+                fetchDbUser()
             } else {
                 setDbUser(null)
             }

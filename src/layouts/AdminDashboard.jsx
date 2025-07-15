@@ -11,7 +11,7 @@ const navItems = [
     { path: '/dashboard/admin/add-meal', label: 'Add Meal', icon: <FaUtensils /> },
     { path: '/dashboard/admin/all-meals', label: 'All Meals', icon: <FaClipboardList /> },
     { path: '/dashboard/admin/all-reviews', label: 'All Reviews', icon: <FaStar /> },
-    { path: '/dashboard/admin/serve-meals', label: 'Serve Meals', icon: <FaServicestack /> },
+    { path: '/dashboard/admin/serve-meal', label: 'Serve Meals', icon: <FaServicestack /> },
     { path: '/dashboard/admin/upcoming-meals', label: 'Upcoming Meals', icon: <FaRegClock /> },
     { path: '/', label: 'Back to Home', icon: <FaHome /> },
 ]
