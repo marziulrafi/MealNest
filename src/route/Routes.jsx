@@ -36,6 +36,14 @@ const router = createBrowserRouter([
         ]
     },
 
+    {
+        path: '/dashboard/admin',
+        element: <PrivateRoutes><AdminRoute><AdminDashboard /></AdminRoute></PrivateRoutes>,
+        children: [
+            { path: 'profile', element: <AdminProfile /> },
+            
+        ]
+    }
 ]);
 
 export default router;

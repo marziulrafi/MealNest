@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router'
 
 const Banner = () => {
     const [search, setSearch] = useState('')
+    const navigate = useNavigate()
 
     const handleSearch = () => {
         if (search) {
-            // navigate(`/meals?search=${search}`)
+            navigate(`/meals?search=${search}`)
             alert(`Search for: ${search}`)
         }
     }

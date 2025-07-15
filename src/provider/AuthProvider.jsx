@@ -1,4 +1,3 @@
-// src/provider/AuthProvider.jsx
 import { createContext, useEffect, useState } from 'react'
 import {
     createUserWithEmailAndPassword,
@@ -7,6 +6,7 @@ import {
     onAuthStateChanged,
     signInWithPopup,
     GoogleAuthProvider,
+    updateProfile,
 } from 'firebase/auth'
 import { auth } from '../firebase.config'
 
@@ -17,6 +17,7 @@ const googleProvider = new GoogleAuthProvider()
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [dbUser, setDbUser] = useState(null)
 
     const createUser = (email, password) => {
         setLoading(true)
@@ -38,20 +39,49 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, googleProvider)
     }
 
+    const updateUserProfile = (name, photo) => {
+        if (auth.currentUser) {
+            return updateProfile(auth.currentUser, {
+                displayName: name,
+                photoURL: photo,
+            })
+        }
+        return Promise.reject(new Error('No user to update'))
+    }
+
+
+    const fetchDbUser = async (email) => {
+        try {
+            const res = await fetch(`http://localhost:3000/users/${email}`)
+            const data = await res.json()
+            setDbUser(data)
+        } catch (err) {
+            console.error('Error fetching dbUser:', err)
+            setDbUser(null)
+        }
+    }
+
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, currentUser => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
             setLoading(false)
+            if (currentUser?.email) {
+                fetchDbUser(currentUser.email)
+            } else {
+                setDbUser(null)
+            }
         })
         return () => unsubscribe()
     }, [])
 
     const authInfo = {
         user,
+        dbUser,
         loading,
         createUser,
         loginUser,
         logoutUser,
+        updateUserProfile,
         googleSignIn,
     }
 

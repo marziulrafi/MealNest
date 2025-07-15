@@ -10,7 +10,7 @@ const MyProfile = () => {
             <img src={user.photoURL} alt="Profile" className="w-24 h-24 rounded-full mb-4" />
             <p><strong>Name:</strong> {user.displayName}</p>
             <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Badge:</strong> Bronze</p>
+            <p><strong>Badge:</strong> {user.badge}</p>
         </div>
     )
 }
