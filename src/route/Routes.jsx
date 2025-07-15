@@ -12,6 +12,8 @@ import AdminRoute from './AdminRoute';
 import AdminDashboard from '../layouts/AdminDashboard';
 import AdminProfile from '../admin/AdminProfile';
 import RequestedMeals from '../student/RequestedMeals';
+import ManageUsers from '../admin/ManageUsers';
+import AddMeal from '../admin/AddMeal';
 
 
 const router = createBrowserRouter([
@@ -41,7 +43,9 @@ const router = createBrowserRouter([
         element: <PrivateRoutes><AdminRoute><AdminDashboard /></AdminRoute></PrivateRoutes>,
         children: [
             { path: 'profile', element: <AdminProfile /> },
-            
+            { path: 'manage-users', element: <ManageUsers /> },
+            { path: 'add-meal', element: <AddMeal /> },
+
         ]
     }
 ]);
