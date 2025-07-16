@@ -16,7 +16,10 @@ const AddMeal = () => {
             const form = new FormData();
             form.append('image', data.image[0]);
 
-            const imgbbRes = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMG}`, form);
+            const imgbbRes = await axios.post(
+                `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMG}`,
+                form
+            );
 
             const imageUrl = imgbbRes.data.data.url;
 
@@ -29,10 +32,7 @@ const AddMeal = () => {
                 price: parseFloat(data.price),
                 distributorName: user.displayName,
                 distributorEmail: user.email,
-                postTime: new Date(),
-                likes: 0,
-                rating: 0,
-                reviews_count: 0,
+                // ⛔ No need to send postTime from frontend
             };
 
             await axios.post('http://localhost:3000/admin/meals', mealData);
@@ -52,7 +52,12 @@ const AddMeal = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <input {...register('title')} placeholder="Meal Title" required className="input input-bordered w-full" />
-                    <input {...register('category')} placeholder="Category" required className="input input-bordered w-full" />
+                    <select {...register('category')} required className="select select-bordered w-full">
+                        <option value="" disabled selected>Select Category</option>
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Lunch">Lunch</option>
+                        <option value="Dinner">Dinner</option>
+                    </select>
                 </div>
 
                 <div className="flex flex-col">
@@ -68,17 +73,13 @@ const AddMeal = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <input type="number" step="0.01" {...register('price')} placeholder="Price (e.g., 9.99)" required className="input input-bordered w-full" />
-                    <input type="datetime-local" {...register('postTime')} required className="input input-bordered w-full" />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <input value={user.displayName} readOnly className="input input-bordered bg-gray-100 text-gray-700 w-full" />
                     <input value={user.email} readOnly className="input input-bordered bg-gray-100 text-gray-700 w-full" />
                 </div>
 
                 <button
                     type="submit"
-                    className="w-full bg-purple-600 hover:bg-purple-700 transition text-white font-semibold py-2 rounded-md"
+                    className="w-full bg-purple-600 hover:bg-purple-700 transition text-white font-semibold py-2 rounded-md cursor-pointer"
                     disabled={loading}
                 >
                     {loading ? 'Uploading Meal...' : 'Add Meal'}

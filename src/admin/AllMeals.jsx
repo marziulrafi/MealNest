@@ -85,7 +85,7 @@ const AllMeals = () => {
                                                 🗑️ Delete
                                             </button>
                                             <button
-                                                onClick={() => window.open(`/meal/${m._id}`, '_blank')}
+                                                onClick={() => window.open(`/meals/${m._id}`, '_blank')}
                                                 className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 transition-all duration-300"
                                             >
                                                 🔍 View

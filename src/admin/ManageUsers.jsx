@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const ManageUsers = () => {
     const queryClient = useQueryClient();
@@ -16,6 +17,23 @@ const ManageUsers = () => {
             return res.data;
         }
     });
+
+    const handleMakeAdmin = (email) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to make this user an admin?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#7c3aed',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, make admin!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                mutate(email);
+                Swal.fire('Updated!', 'User has been made admin.', 'success');
+            }
+        });
+    };
 
     const { mutate, isLoading: isMutating } = useMutation({
         mutationFn: (email) => axios.patch(`http://localhost:3000/users/${email}/make-admin`),
@@ -58,9 +76,9 @@ const ManageUsers = () => {
                                     <td className="px-4 py-2 text-center">
                                         {user.role !== 'admin' ? (
                                             <button
-                                                onClick={() => mutate(user.email)}
+                                                onClick={() => handleMakeAdmin(user.email)}
                                                 disabled={isMutating}
-                                                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-1 rounded transition-all duration-200"
+                                                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-1 rounded transition-all duration-200 cursor-pointer"
                                             >
                                                 {isMutating ? 'Updating...' : 'Make Admin'}
                                             </button>

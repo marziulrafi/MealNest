@@ -17,6 +17,7 @@ import AddMeal from '../admin/AddMeal';
 import AllMeals from '../admin/AllMeals';
 import ServeMeal from '../admin/ServeMeal';
 import UpcomingMeals from '../admin/UpcomingMeals';
+import AllReviews from '../admin/AllReviews';
 
 
 const router = createBrowserRouter([
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
             { path: '/join', element: <JoinUs /> },
             { path: '/meals', element: <Meals /> },
             { path: '/meals/:id', element: <MealDetails /> },
+            { path: 'upcoming-meals', element: <UpcomingMeals /> },
         ],
     },
 
@@ -49,6 +51,7 @@ const router = createBrowserRouter([
             { path: 'manage-users', element: <ManageUsers /> },
             { path: 'add-meal', element: <AddMeal /> },
             { path: 'all-meals', element: <AllMeals /> },
+            { path: 'all-reviews', element: <AllReviews /> },
             { path: 'serve-meal', element: <ServeMeal /> },
             { path: 'upcoming-meals', element: <UpcomingMeals /> },
 

@@ -18,6 +18,7 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [dbUser, setDbUser] = useState(null)
+    const [role, setRole] = useState(null)
 
     const createUser = (email, password) => {
         setLoading(true)
@@ -49,24 +50,24 @@ const AuthProvider = ({ children }) => {
         return Promise.reject(new Error('No user to update'))
     }
 
-
     const fetchDbUser = async () => {
         try {
-            const token = await auth.currentUser.getIdToken();
+            const token = await auth.currentUser.getIdToken()
             const res = await fetch('http://localhost:3000/users/me', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-            });
-            if (!res.ok) throw new Error('Failed to fetch user');
-            const data = await res.json();
-            setDbUser(data);
+            })
+            if (!res.ok) throw new Error('Failed to fetch user')
+            const data = await res.json()
+            setDbUser(data)
+            setRole(data?.role || null)
         } catch (err) {
-            console.error('Error fetching dbUser:', err);
-            setDbUser(null);
+            console.error('Error fetching dbUser:', err)
+            setDbUser(null)
+            setRole(null)
         }
-    };
-
+    }
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -76,6 +77,7 @@ const AuthProvider = ({ children }) => {
                 fetchDbUser()
             } else {
                 setDbUser(null)
+                setRole(null)
             }
         })
         return () => unsubscribe()
@@ -84,6 +86,7 @@ const AuthProvider = ({ children }) => {
     const authInfo = {
         user,
         dbUser,
+        role,
         loading,
         createUser,
         loginUser,
