@@ -7,7 +7,7 @@ import MealDetails from '../pages/MealDetails';
 import PrivateRoutes from './PrivateRoutes'
 import DashboardLayout from '../layouts/DashboardLayout';
 import MyProfile from '../student/MyProfile';
-import Checkout from '../pages/Checkout';
+import Checkout from '../pages/Success';
 import AdminRoute from './AdminRoute';
 import AdminDashboard from '../layouts/AdminDashboard';
 import AdminProfile from '../admin/AdminProfile';
@@ -18,6 +18,13 @@ import AllMeals from '../admin/AllMeals';
 import ServeMeal from '../admin/ServeMeal';
 import UpcomingMeals from '../admin/UpcomingMeals';
 import AllReviews from '../admin/AllReviews';
+import CheckoutForm from '../components/CheckoutForm';
+import Success from '../pages/Success';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import PaymentHistory from '../student/PaymentHistory';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE);
 
 
 const router = createBrowserRouter([
@@ -30,6 +37,20 @@ const router = createBrowserRouter([
             { path: '/meals', element: <Meals /> },
             { path: '/meals/:id', element: <MealDetails /> },
             { path: 'upcoming-meals', element: <UpcomingMeals /> },
+            {
+                path: '/checkout/:plan',
+                element: (
+                    <PrivateRoutes>
+                        <Elements stripe={stripePromise}>
+                            <CheckoutForm />
+                        </Elements>
+                    </PrivateRoutes>
+                ),
+            },
+            {
+                path: '/checkout/success',
+                element: <Success />,
+            },
         ],
     },
 
@@ -38,7 +59,8 @@ const router = createBrowserRouter([
         element: <PrivateRoutes><DashboardLayout /></PrivateRoutes>,
         children: [
             { path: 'profile', element: <MyProfile /> },
-            { path: 'requests', element: <RequestedMeals /> }
+            { path: 'requests', element: <RequestedMeals /> },
+            { path: 'payments', element: <PaymentHistory /> }
 
         ]
     },
