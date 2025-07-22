@@ -21,14 +21,20 @@ const CheckoutForm = () => {
     const [clientSecret, setClientSecret] = useState('');
     const [processing, setProcessing] = useState(false);
 
-    const amount = packagePrice[plan?.toLowerCase()] || 0;
+    const planCapitalized = plan?.charAt(0).toUpperCase() + plan?.slice(1).toLowerCase();
+    const amount = packagePrice[planCapitalized] || 0;
 
     useEffect(() => {
         if (!amount) return;
 
-        axios.post('http://localhost:3000/create-payment-intent', { amount: amount * 100 })
+        axios
+            .post('http://localhost:3000/create-payment-intent', { amount: amount * 100 })
             .then(res => {
                 setClientSecret(res.data.clientSecret);
+            })
+            .catch(err => {
+                console.error('Error creating payment intent:', err);
+                toast.error('Failed to initialize payment.');
             });
     }, [amount]);
 
@@ -37,14 +43,21 @@ const CheckoutForm = () => {
         if (!stripe || !elements) return;
 
         setProcessing(true);
+
         const card = elements.getElement(CardElement);
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
+        if (!card) {
+            toast.error('Card element not found.');
+            setProcessing(false);
+            return;
+        }
+
+        const { error: methodError, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card
         });
 
-        if (error) {
-            toast.error(error.message);
+        if (methodError) {
+            toast.error(methodError.message);
             setProcessing(false);
             return;
         }
@@ -65,24 +78,31 @@ const CheckoutForm = () => {
             return;
         }
 
-        if (paymentIntent.status === 'succeeded') {
+        if (paymentIntent?.status === 'succeeded') {
             const paymentData = {
-                name: user.displayName,
-                email: user.email,
-                package: plan,
+                name: user?.displayName,
+                email: user?.email,
+                package: planCapitalized,
                 amount,
                 transactionId: paymentIntent.id,
-                date: new Date()
+                date: new Date().toISOString()
             };
 
-            const token = await user.getIdToken();
+            try {
+                const token = await user.getIdToken();
 
-            await axios.post('http://localhost:3000/payments', paymentData, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+                await axios.post('http://localhost:3000/payments', paymentData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
 
-            toast.success(`🎉 ${plan} package activated!`);
-            navigate('/dashboard/profile');
+                toast.success(`🎉 ${planCapitalized} package activated!`);
+                navigate('/dashboard/profile');
+            } catch (err) {
+                toast.error('Failed to save payment. Please contact support.');
+                console.error(err);
+            }
         }
 
         setProcessing(false);
@@ -91,7 +111,7 @@ const CheckoutForm = () => {
     return (
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow max-w-lg mx-auto mt-10">
             <h2 className="text-2xl font-bold mb-4 text-purple-700">
-                Checkout - {plan?.charAt(0).toUpperCase() + plan?.slice(1)} Package
+                Checkout - {planCapitalized} Package
             </h2>
 
             <p className="mb-4 text-gray-600">Amount: ৳{amount}</p>

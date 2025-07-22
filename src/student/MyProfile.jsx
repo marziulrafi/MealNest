@@ -10,7 +10,17 @@ const badgeColors = {
 
 const MyProfile = () => {
     const { user, dbUser } = useContext(AuthContext);
-    const badge = dbUser?.badge || 'No Badge';
+
+    // ✅ Wait for dbUser to load
+    if (!user || !dbUser) {
+        return (
+            <div className="flex justify-center items-center h-60">
+                <span className="loading loading-spinner text-purple-600"></span>
+            </div>
+        );
+    }
+
+    const badge = dbUser?.badge;
 
     return (
         <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg text-center border border-purple-200">
@@ -22,11 +32,12 @@ const MyProfile = () => {
             <h2 className="text-2xl font-semibold text-purple-700 mb-1">{user.displayName}</h2>
             <p className="text-gray-600 mb-4">{user.email}</p>
 
-            <div className="inline-block px-4 py-1 rounded-full text-sm font-semibold shadow-sm capitalize 
+            <div
+                className={`inline-block px-4 py-1 rounded-full text-sm font-semibold shadow-sm capitalize 
         transition-all duration-300
-        ${badgeColors[badge] || 'bg-gray-200 text-gray-600'}
-      ">
-                {badge}
+        ${badgeColors[badge] || 'bg-gray-200 text-gray-600'}`}
+            >
+                {badge || 'No Badge'}
             </div>
         </div>
     );

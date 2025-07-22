@@ -1,4 +1,3 @@
-
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -8,7 +7,7 @@ import toast from 'react-hot-toast';
 
 const MealDetails = () => {
     const { id } = useParams();
-    const { user } = useContext(AuthContext);
+    const { user, dbUser } = useContext(AuthContext);
     const [review, setReview] = useState('');
 
     const { data: meal = {}, refetch } = useQuery({
@@ -21,20 +20,32 @@ const MealDetails = () => {
 
     const handleLike = async () => {
         if (!user) return toast.error("Login required to like");
-        await axios.patch(`http://localhost:3000/meals/${id}`, { likes: (meal.likes || 0) + 1 });
+        await axios.patch(`http://localhost:3000/meals/${id}`, {
+            likes: (meal.likes || 0) + 1
+        });
         refetch();
     };
 
     const handleRequest = async () => {
         if (!user) return toast.error("Login required to request meal");
-        await axios.post(`http://localhost:3000/serve-meals`, {
-            mealId: id,
-            mealTitle: meal.name,
-            email: user.email,
-            name: user.displayName,
-            status: 'pending',
-        });
-        toast.success('Meal requested!');
+        if (!dbUser?.badge || !['silver', 'gold', 'platinum'].includes(dbUser.badge.toLowerCase())) {
+            return toast.error("You must have a subscription to request a meal");
+        }
+
+
+        try {
+            await axios.post(`http://localhost:3000/serve-meals`, {
+                mealId: id,
+                mealTitle: meal.title,
+                email: user.email,
+                name: user.displayName,
+                status: 'pending',
+            });
+            toast.success('Meal requested!');
+        } catch (err) {
+            console.error(err);
+            toast.error(err.response?.data?.message || 'Failed to request meal');
+        }
     };
 
     const handleReview = async () => {
@@ -53,23 +64,19 @@ const MealDetails = () => {
 
     return (
         <div className="max-w-5xl mx-auto p-4 space-y-6 bg-white rounded-xl shadow-md mt-6">
-            <img src={meal.image} alt={meal.name} className="w-full h-[400px] object-cover rounded-md shadow" />
+            <img src={meal.image} alt={meal.title} className="w-full h-[400px] object-cover rounded-md shadow" />
             <h1 className="text-3xl font-bold text-purple-700">{meal.title}</h1>
-            <p className="text-gray-600">👨‍🍳 Distributor: <span className="font-medium">{meal.distributorName}</span></p>
-            <h1 className='text-xl font-semibold mt-6 mb-2 text-purple-800'>Description</h1>
+            <p className="text-gray-600">
+                👨‍🍳 Distributor: <span className="font-medium">{meal.distributorName}</span>
+            </p>
+            <h2 className="text-xl font-semibold mt-6 mb-2 text-purple-800">Description</h2>
             <p className="text-md text-gray-700 leading-relaxed">{meal.description}</p>
 
             <div className="flex flex-wrap gap-4 mt-4">
-                <button
-                    onClick={handleLike}
-                    className="bg-red-100 text-red-600 px-4 py-2 rounded-full font-semibold hover:bg-red-200 transition-all"
-                >
+                <button onClick={handleLike} className="bg-red-100 text-red-600 px-4 py-2 rounded-full">
                     ❤️ Like ({meal.likes || 0})
                 </button>
-                <button
-                    onClick={handleRequest}
-                    className="bg-purple-100 text-purple-700 px-4 py-2 rounded-full font-semibold hover:bg-purple-200 transition-all"
-                >
+                <button onClick={handleRequest} className="bg-purple-100 text-purple-700 px-4 py-2 rounded-full">
                     🍽️ Request Meal
                 </button>
             </div>
@@ -89,13 +96,10 @@ const MealDetails = () => {
                     rows={3}
                     value={review}
                     onChange={(e) => setReview(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md p-3 focus:outline-purple-400"
-                    placeholder="Share your thoughts about this meal..."
-                ></textarea>
-                <button
-                    onClick={handleReview}
-                    className="mt-2 px-5 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                >
+                    className="w-full border rounded-md p-3 focus:outline-purple-400"
+                    placeholder="Share your thoughts..."
+                />
+                <button onClick={handleReview} className="mt-2 px-5 py-2 bg-green-500 text-white rounded">
                     Submit Review
                 </button>
             </div>

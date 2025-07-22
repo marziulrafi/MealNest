@@ -66,7 +66,7 @@ const Navbar = () => {
                             {isDropdownOpen && (
                                 <div className="absolute right-0 top-12 flex flex-col bg-white shadow-lg rounded-md p-3 text-sm z-50 min-w-[150px] animate-fadeIn">
                                     <span className="text-gray-600">{user.displayName || 'User'}</span>
-                                    <NavLink to="/dashboard" className="hover:text-purple-500">Dashboard</NavLink>
+                                    <NavLink to="/dashboard/profile" className="hover:text-purple-500">Dashboard</NavLink>
                                     <button onClick={logoutUser} className="text-red-500 hover:underline flex items-center gap-1 mt-1">
                                         <LogOut size={16} /> Logout
                                     </button>
