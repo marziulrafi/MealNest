@@ -25,7 +25,9 @@ const ServeMeal = () => {
         <div>
             <h2 className="text-xl font-bold mb-4 text-purple-700">📦 Serve Meals</h2>
             {isLoading ? (
-                <p className="text-center text-gray-500">Loading requests...</p>
+                <div className="flex justify-center items-center h-60">
+                    <span className="loading loading-spinner text-purple-600"></span>
+                </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full bg-white shadow-md rounded-lg">

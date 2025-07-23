@@ -23,6 +23,7 @@ import Success from '../pages/Success';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import PaymentHistory from '../student/PaymentHistory';
+import MyReviews from '../student/MyReviews';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE);
 
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
             { path: '/join', element: <JoinUs /> },
             { path: '/meals', element: <Meals /> },
             { path: '/meals/:id', element: <MealDetails /> },
-            { path: 'upcoming-meals', element: <UpcomingMeals /> },
+            { path: '/upcoming-meals', element: <UpcomingMeals /> },
             {
                 path: '/checkout/:plan',
                 element: (
@@ -60,7 +61,8 @@ const router = createBrowserRouter([
         children: [
             { path: 'profile', element: <MyProfile /> },
             { path: 'requests', element: <RequestedMeals /> },
-            { path: 'payments', element: <PaymentHistory /> }
+            { path: 'payments', element: <PaymentHistory /> },
+            { path: 'reviews', element: <MyReviews /> },
 
         ]
     },

@@ -73,17 +73,17 @@ const Authentication = () => {
         try {
             await loginUser(data.email, data.password)
 
-            toast.success(`${data.role === 'admin' ? 'Admin' : 'Student'} login successful!`)
+            toast.success(`${data.role === 'admin' ? 'Admin' : 'Student'} Login Successful!`)
             resetLog()
 
             // optional: navigate based on role
-            navigate(data.role === 'admin' ? '/dashboard/admin' : '/dashboard/student')
+            navigate(data.role === 'admin' ? '/dashboard/admin/profile' : '/dashboard/profile')
         } catch (err) {
             toast.error(err.message)
         }
     }
 
-    // ✅ Google Login
+
     const handleGoogle = async () => {
         try {
             const result = await googleSignIn()

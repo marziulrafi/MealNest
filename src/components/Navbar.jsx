@@ -5,7 +5,7 @@ import { AuthContext } from '../provider/AuthProvider'
 import logo from '../assets/logo.png'
 
 const Navbar = () => {
-    const { user, logoutUser } = useContext(AuthContext)
+    const { user, logoutUser, role } = useContext(AuthContext)
     const [menuOpen, setMenuOpen] = useState(false)
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
@@ -41,7 +41,7 @@ const Navbar = () => {
         <div className="bg-white/30 backdrop-blur-md shadow-md sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
-              
+
                 <Link to="/" className="flex items-center gap-2 text-xl font-bold text-purple-700">
                     <img src={logo} alt="Logo" className="w-12 h-12" />
                     MealNest
@@ -66,17 +66,20 @@ const Navbar = () => {
                             {isDropdownOpen && (
                                 <div className="absolute right-0 top-12 flex flex-col bg-white shadow-lg rounded-md p-3 text-sm z-50 min-w-[150px] animate-fadeIn">
                                     <span className="text-gray-600">{user.displayName || 'User'}</span>
-                                    <NavLink to="/dashboard/profile" className="hover:text-purple-500">Dashboard</NavLink>
+                                    <NavLink to={role === 'admin' ? '/dashboard/admin/profile' : '/dashboard/profile'} className="hover:text-purple-500">
+                                        Dashboard
+                                    </NavLink>
                                     <button onClick={logoutUser} className="text-red-500 hover:underline flex items-center gap-1 mt-1">
                                         <LogOut size={16} /> Logout
                                     </button>
                                 </div>
                             )}
+
                         </div>
                     )}
                 </div>
 
-              
+
                 <div className="md:hidden flex items-center gap-3">
                     <button onClick={() => setMenuOpen(!menuOpen)}>
                         <Menu className="w-6 h-6 text-purple-700" />
@@ -84,7 +87,7 @@ const Navbar = () => {
                 </div>
             </div>
 
-         
+
             {menuOpen && (
                 <div className="md:hidden px-4 py-2 flex flex-col gap-2 bg-white shadow-md">
                     {navLinks}
@@ -94,7 +97,9 @@ const Navbar = () => {
                     ) : (
                         <div className="flex flex-col text-sm gap-1">
                             <span className="text-gray-700">{user.displayName || 'User'}</span>
-                            <NavLink to="/dashboard">Dashboard</NavLink>
+                            <NavLink to={role === 'admin' ? '/dashboard/admin/profile' : '/dashboard/profile'}>
+                                Dashboard
+                            </NavLink>
                             <button onClick={logoutUser} className="text-red-500 text-left">Logout</button>
                         </div>
                     )}

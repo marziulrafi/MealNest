@@ -54,7 +54,9 @@ const UpcomingMeals = () => {
                 </div>
 
                 {isLoading ? (
-                    <p className="text-gray-500">Loading upcoming meals...</p>
+                    <div className="flex justify-center items-center h-60">
+                        <span className="loading loading-spinner text-purple-600"></span>
+                    </div>
                 ) : meals.length === 0 ? (
                     <p className="text-center text-gray-500">No upcoming meals available.</p>
                 ) : (
@@ -124,7 +126,9 @@ const UpcomingMeals = () => {
         <div className="max-w-6xl mx-auto p-6">
             <h2 className="text-2xl font-bold text-purple-700 mb-6">📅 Upcoming Meals</h2>
             {isLoading ? (
-                <p className="text-gray-500">Loading meals...</p>
+                <div className="flex justify-center items-center h-60">
+                    <span className="loading loading-spinner text-purple-600"></span>
+                </div>
             ) : meals.length === 0 ? (
                 <p className="text-center text-gray-500">No upcoming meals yet.</p>
             ) : (

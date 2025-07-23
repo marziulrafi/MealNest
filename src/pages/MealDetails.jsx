@@ -48,19 +48,33 @@ const MealDetails = () => {
         }
     };
 
+
     const handleReview = async () => {
-        if (!user) return toast.error("Login required to post review");
-        if (!review) return toast.error('Write a review');
-        await axios.post(`http://localhost:3000/reviews`, {
-            mealId: id,
-            email: user.email,
+        if (!user) return toast.error("Login required to submit a review");
+        if (!review.trim()) return toast.error("Review cannot be empty");
+
+        const newReview = {
             name: user.displayName,
-            content: review,
-        });
-        setReview('');
-        toast.success('Review added!');
-        refetch();
+            email: user.email,
+            content: review.trim(),
+        };
+
+        try {
+            const res = await axios.post(`http://localhost:3000/meals/${id}/review`, newReview);
+            if (res.data?.acknowledged || res.data?.insertedId) {
+                toast.success("Review submitted!");
+                setReview('');
+                refetch();
+            } else {
+                toast.error("Failed to submit review");
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error(err.response?.data?.message || "Something went wrong");
+        }
     };
+
+
 
     return (
         <div className="max-w-5xl mx-auto p-4 space-y-6 bg-white rounded-xl shadow-md mt-6">
@@ -73,10 +87,10 @@ const MealDetails = () => {
             <p className="text-md text-gray-700 leading-relaxed">{meal.description}</p>
 
             <div className="flex flex-wrap gap-4 mt-4">
-                <button onClick={handleLike} className="bg-red-100 text-red-600 px-4 py-2 rounded-full">
+                <button onClick={handleLike} className="bg-red-100 text-red-600 px-4 py-2 rounded-full cursor-pointer">
                     ❤️ Like ({meal.likes || 0})
                 </button>
-                <button onClick={handleRequest} className="bg-purple-100 text-purple-700 px-4 py-2 rounded-full">
+                <button onClick={handleRequest} className="bg-purple-100 text-purple-700 px-4 py-2 rounded-full cursor-pointer">
                     🍽️ Request Meal
                 </button>
             </div>
@@ -99,7 +113,7 @@ const MealDetails = () => {
                     className="w-full border rounded-md p-3 focus:outline-purple-400"
                     placeholder="Share your thoughts..."
                 />
-                <button onClick={handleReview} className="mt-2 px-5 py-2 bg-green-500 text-white rounded">
+                <button onClick={handleReview} className="mt-2 px-5 py-2 bg-green-500 text-white rounded cursor-pointer">
                     Submit Review
                 </button>
             </div>

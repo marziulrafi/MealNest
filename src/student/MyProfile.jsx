@@ -11,7 +11,7 @@ const badgeColors = {
 const MyProfile = () => {
     const { user, dbUser } = useContext(AuthContext);
 
-    // ✅ Wait for dbUser to load
+
     if (!user || !dbUser) {
         return (
             <div className="flex justify-center items-center h-60">

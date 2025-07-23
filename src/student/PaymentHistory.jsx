@@ -11,18 +11,13 @@ const PaymentHistory = () => {
         queryKey: ['paymentHistory', user?.email],
         enabled: !loading && !!user,
         queryFn: async () => {
-            const token = await user.getIdToken(true);  // force-refresh token
+            const token = await user.getIdToken(true); 
             const res = await axios.get('http://localhost:3000/payments/user', {
                 headers: { Authorization: `Bearer ${token}` },
             });
             return res.data;
         },
     });
-
-    console.log("Frontend - User:", user);
-    console.log("Frontend - AuthContext loading:", loading);
-    console.log("Frontend - useQuery isLoading:", isLoading);
-    console.log("Frontend - Payments received:", payments, payments.length);
 
     return (
         <div className="max-w-4xl mx-auto px-6 py-10">
