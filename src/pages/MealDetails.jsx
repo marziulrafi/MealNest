@@ -32,7 +32,6 @@ const MealDetails = () => {
             return toast.error("You must have a subscription to request a meal");
         }
 
-
         try {
             await axios.post(`http://localhost:3000/serve-meals`, {
                 mealId: id,
@@ -48,7 +47,6 @@ const MealDetails = () => {
         }
     };
 
-
     const handleReview = async () => {
         if (!user) return toast.error("Login required to submit a review");
         if (!review.trim()) return toast.error("Review cannot be empty");
@@ -56,7 +54,7 @@ const MealDetails = () => {
         const newReview = {
             name: user.displayName,
             email: user.email,
-            content: review.trim(),
+            content: review.trim()
         };
 
         try {
@@ -73,8 +71,6 @@ const MealDetails = () => {
             toast.error(err.response?.data?.message || "Something went wrong");
         }
     };
-
-
 
     return (
         <div className="max-w-5xl mx-auto p-4 space-y-6 bg-white rounded-xl shadow-md mt-6">

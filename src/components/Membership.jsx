@@ -30,28 +30,34 @@ const Membership = () => {
                 Upgrade Your Meal Experience 🚀
             </h2>
 
-            <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+            <div className="max-w-6xl mx-auto grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-4 py-8">
                 {packages.map((pkg, i) => (
                     <div
                         key={i}
-                        className={`bg-${pkg.color} rounded-xl shadow-lg p-6 border border-purple-200 hover:scale-105 transition-all duration-300`}
+                        className="bg-white rounded-2xl shadow-xl border border-purple-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 p-6 flex flex-col justify-between"
                     >
-                        <h3 className="text-xl font-bold text-purple-800 mb-2">{pkg.name} Plan</h3>
-                        <p className="text-3xl font-extrabold text-purple-700 mb-4">৳{pkg.price}</p>
-                        <ul className="text-gray-700 mb-6 space-y-1 list-disc list-inside">
-                            {pkg.features.map((f, idx) => (
-                                <li key={idx}>{f}</li>
-                            ))}
-                        </ul>
+                        <div>
+                            <h3 className="text-2xl font-semibold text-purple-700 mb-2">{pkg.name} Plan</h3>
+                            <p className="text-4xl font-bold text-purple-600 mb-4">৳{pkg.price}</p>
+                            <ul className="text-gray-600 mb-6 space-y-2">
+                                {pkg.features.map((f, idx) => (
+                                    <li key={idx} className="flex items-start space-x-2">
+                                        <span className="text-purple-500 mt-1">✔</span>
+                                        <span>{f}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                         <button
                             onClick={() => navigate(`/checkout/${pkg.name.toLowerCase()}`)}
-                            className="w-full py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                            className="mt-auto w-full py-2 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition"
                         >
                             Get {pkg.name}
                         </button>
                     </div>
                 ))}
             </div>
+
         </div>
     )
 }
