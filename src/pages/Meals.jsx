@@ -27,10 +27,16 @@ const Meals = () => {
         const res = await axios.get('http://localhost:3000/meals', { params });
         const newMeals = res.data;
 
-        setMeals(prev => [...prev, ...newMeals]);
+        // Filter out duplicates by _id
+        const uniqueMeals = newMeals.filter(
+            newMeal => !meals.some(existingMeal => existingMeal._id === newMeal._id)
+        );
+
+        setMeals(prev => [...prev, ...uniqueMeals]);
         setHasMore(newMeals.length === PAGE_SIZE);
         setPage(prev => prev + 1);
     };
+
 
     const handleFilter = () => {
         setMeals([]);

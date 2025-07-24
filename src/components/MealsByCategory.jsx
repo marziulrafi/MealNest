@@ -12,7 +12,7 @@ const MealsByCategory = () => {
     const { data: meals = [], isLoading } = useQuery({
         queryKey: ['meals-by-category'],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:3000/meals')
+            const res = await axios.get('http://localhost:3000/meals?sortBy=likes&limit=0')
             return res.data
         }
     })
@@ -58,12 +58,11 @@ const MealsByCategory = () => {
                                 >
                                     <img
                                         src={meal.image}
-                                        alt={meal.name}
+                                        alt={meal.title}
                                         className="w-full h-40 object-cover rounded-lg mb-3"
                                     />
-                                    <h4 className="font-bold text-lg text-purple-800">{meal.name}</h4>
-                                    <p className="text-sm text-gray-500">Rating: {meal.rating || 'N/A'}</p>
-                                    <p className="text-sm text-gray-600 font-medium mb-3">
+                                    <h4 className="font-bold text-lg text-purple-800">{meal.title}</h4>
+                                    <p className="text-gray-600 font-medium mb-3">
                                         Price: ৳{meal.price}
                                     </p>
                                     <button

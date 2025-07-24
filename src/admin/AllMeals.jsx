@@ -9,7 +9,7 @@ const AllMeals = () => {
     const { data: meals = [], isLoading } = useQuery({
         queryKey: ['meals', 'all'],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:3000/meals?sortBy=likes');
+            const res = await axios.get('http://localhost:3000/meals?sortBy=likes&limit=0');
             return res.data;
         }
     });
