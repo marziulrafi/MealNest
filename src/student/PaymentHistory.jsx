@@ -12,7 +12,7 @@ const PaymentHistory = () => {
         enabled: !loading && !!user,
         queryFn: async () => {
             const token = await user.getIdToken(true); 
-            const res = await axios.get('http://localhost:3000/payments/user', {
+            const res = await axios.get(`http://localhost:3000/payments?email=${user.email}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             return res.data;

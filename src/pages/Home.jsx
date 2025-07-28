@@ -3,7 +3,6 @@ import Banner from '../components/Banner';
 import MealsByCategory from '../components/MealsByCategory';
 import Membership from '../components/Membership';
 import MostLovedMeals from '../components/MostLovedMeals';
-import TopChefs from '../components/TopChefs';
 
 const Home = () => {
     return (
