@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 
 const PAGE_SIZE = 6;
 
+const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+};
+
 const Meals = () => {
+    const query = useQuery();
+    const initialSearch = query.get('search') || '';
+
     const [meals, setMeals] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(0);
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState(initialSearch);
     const [category, setCategory] = useState('');
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
@@ -27,7 +34,6 @@ const Meals = () => {
         const res = await axios.get('http://localhost:3000/meals', { params });
         const newMeals = res.data;
 
-        // Filter out duplicates by _id
         const uniqueMeals = newMeals.filter(
             newMeal => !meals.some(existingMeal => existingMeal._id === newMeal._id)
         );
@@ -37,15 +43,14 @@ const Meals = () => {
         setPage(prev => prev + 1);
     };
 
-
     const handleFilter = () => {
         setMeals([]);
         setPage(0);
         setHasMore(true);
     };
 
+    
     useEffect(() => {
-        // Reset and fetch first batch
         const resetMeals = async () => {
             const params = {
                 skip: 0,
@@ -65,7 +70,7 @@ const Meals = () => {
 
     return (
         <div className="p-5">
-            {/* Search & Filters */}
+           
             <div className="mb-4 grid md:grid-cols-4 gap-4">
                 <input
                     type="text"
@@ -96,7 +101,7 @@ const Meals = () => {
                 />
             </div>
 
-            {/* Infinite Scroll */}
+          
             <InfiniteScroll
                 dataLength={meals.length}
                 next={fetchMeals}
@@ -141,7 +146,6 @@ const Meals = () => {
                     ))}
                 </div>
             </InfiniteScroll>
-
         </div>
     );
 };

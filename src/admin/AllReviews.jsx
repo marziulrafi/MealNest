@@ -15,7 +15,7 @@ const AllReviews = () => {
         }
     });
 
-    // Fetch associated meal info
+
     useEffect(() => {
         const uniqueMealIds = [...new Set(reviews.map(r => r.mealId))];
 
@@ -27,7 +27,7 @@ const AllReviews = () => {
                     const res = await axios.get(`http://localhost:3000/meals/${id}`);
                     newMealMap[id] = res.data;
                 } catch (e) {
-                    newMealMap[id] = null; // meal may have been deleted
+                    newMealMap[id] = null; 
                 }
             }));
 

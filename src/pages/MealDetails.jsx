@@ -59,7 +59,10 @@ const MealDetails = () => {
 
         try {
             const res = await axios.post(`http://localhost:3000/meals/${id}/review`, newReview);
-            if (res.data?.acknowledged || res.data?.insertedId) {
+            console.log("Review response:", res.data);
+
+          
+            if (res.data?.acknowledged || res.data?.success || res.status === 200) {
                 toast.success("Review submitted!");
                 setReview('');
                 refetch();
@@ -71,6 +74,7 @@ const MealDetails = () => {
             toast.error(err.response?.data?.message || "Something went wrong");
         }
     };
+
 
     return (
         <div className="max-w-5xl mx-auto p-4 space-y-6 bg-white rounded-xl shadow-md mt-6">

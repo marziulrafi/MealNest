@@ -1,15 +1,21 @@
 import { Tab } from '@headlessui/react'
 import { useForm } from 'react-hook-form'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { AuthContext } from '../provider/AuthProvider'
 import toast from 'react-hot-toast'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router'
 import { auth } from '../firebase.config'
+import Select from 'react-select'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
+
+const roleOptions = [
+    { value: 'student', label: 'Student' },
+    { value: 'admin', label: 'Admin' }
+]
 
 const Authentication = () => {
     const { createUser, loginUser, googleSignIn, updateUserProfile } = useContext(AuthContext)
@@ -25,9 +31,11 @@ const Authentication = () => {
         register: log,
         handleSubmit: handleLogin,
         reset: resetLog,
+        setValue,
     } = useForm()
 
-    // 🧠 Save user to MongoDB
+    const [selectedRole, setSelectedRole] = useState(null)
+
     const saveUserToDB = async (user) => {
         try {
             const res = await fetch('http://localhost:3000/users', {
@@ -42,7 +50,6 @@ const Authentication = () => {
         }
     }
 
-    // ✅ Register
     const onRegister = async (data) => {
         try {
             await createUser(data.email, data.password)
@@ -68,21 +75,16 @@ const Authentication = () => {
         }
     }
 
-    // ✅ Login (role logic included)
     const onLogin = async (data) => {
         try {
             await loginUser(data.email, data.password)
-
             toast.success(`${data.role === 'admin' ? 'Admin' : 'Student'} Login Successful!`)
             resetLog()
-
-            // optional: navigate based on role
             navigate(data.role === 'admin' ? '/dashboard/admin/profile' : '/dashboard/profile')
         } catch (err) {
             toast.error(err.message)
         }
     }
-
 
     const handleGoogle = async () => {
         try {
@@ -108,10 +110,8 @@ const Authentication = () => {
         }
     }
 
-    // ✅ Update user info in DB (can be used in Profile page)
     const updateUser = async (email, updates) => {
         if (!auth.currentUser) throw new Error('Not authenticated')
-
         const idToken = await auth.currentUser.getIdToken()
         const res = await fetch(`http://localhost:3000/users/${email}`, {
             method: 'PATCH',
@@ -121,22 +121,20 @@ const Authentication = () => {
             },
             body: JSON.stringify(updates),
         })
-
-        const data = await res.json()
-        return data
+        return res.json()
     }
 
     return (
-        <div className="max-w-md mx-auto mt-10 px-4">
+        <div className="max-w-lg w-full mx-auto mt-10 px-4">
             <Tab.Group>
-                <Tab.List className="flex space-x-1 rounded-full bg-gray-200 p-1 mb-8">
+                <Tab.List className="flex space-x-1 rounded-full bg-base-200 p-1 mb-8">
                     {['Login', 'Register'].map((tab) => (
                         <Tab
                             key={tab}
                             className={({ selected }) =>
                                 classNames(
                                     'w-full py-2 text-sm font-semibold leading-5 rounded-full transition',
-                                    selected ? 'bg-purple-600 text-white shadow' : 'text-gray-700 hover:bg-purple-100 cursor-pointer'
+                                    selected ? 'bg-primary text-white shadow' : 'text-gray-700 hover:bg-primary/10 cursor-pointer'
                                 )
                             }
                         >
@@ -152,26 +150,25 @@ const Authentication = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white shadow-xl rounded-lg p-6"
+                            className="bg-white shadow-md rounded-lg p-6"
                         >
                             <form onSubmit={handleLogin(onLogin)} className="space-y-4">
-                                <input {...log('email')} type="email" placeholder="Email" className="input-field" required />
-                                <input {...log('password')} type="password" placeholder="Password" className="input-field" required />
+                                <input {...log('email')} type="email" placeholder="Email" className="input input-bordered w-full" required />
+                                <input {...log('password')} type="password" placeholder="Password" className="input input-bordered w-full" required />
 
-                                <select {...log('role')} className="input-field" required>
-                                    <option value="">Select Role</option>
-                                    <option value="student">Student</option>
-                                    <option value="admin">Admin</option>
-                                </select>
+                                <Select
+                                    options={roleOptions}
+                                    placeholder="Select Role"
+                                    onChange={(selected) => {
+                                        setSelectedRole(selected)
+                                        setValue('role', selected.value)
+                                    }}
+                                    className="text-sm"
+                                    required
+                                />
 
-                                <button type="submit" className="w-full bg-purple-600 text-white py-2 rounded-md shadow hover:bg-purple-700 transition font-semibold cursor-pointer">
-                                    Login
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleGoogle}
-                                    className="w-full bg-red-500 text-white py-2 rounded-md shadow hover:bg-red-600 transition font-semibold cursor-pointer"
-                                >
+                                <button type="submit" className="btn btn-primary w-full">Login</button>
+                                <button type="button" onClick={handleGoogle} className="btn btn-error w-full text-white">
                                     Continue with Google
                                 </button>
                             </form>
@@ -184,22 +181,16 @@ const Authentication = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white shadow-xl rounded-lg p-6"
+                            className="bg-white shadow-md rounded-lg p-6"
                         >
                             <form onSubmit={handleRegister(onRegister)} className="space-y-4">
-                                <input {...reg('name')} type="text" placeholder="Full Name" className="input-field" required />
-                                <input {...reg('photo')} type="text" placeholder="Photo URL" className="input-field" required />
-                                <input {...reg('email')} type="email" placeholder="Email" className="input-field" required />
-                                <input {...reg('password')} type="password" placeholder="Password" className="input-field" required />
+                                <input {...reg('name')} type="text" placeholder="Full Name" className="input input-bordered w-full" required />
+                                <input {...reg('photo')} type="text" placeholder="Photo URL" className="input input-bordered w-full" required />
+                                <input {...reg('email')} type="email" placeholder="Email" className="input input-bordered w-full" required />
+                                <input {...reg('password')} type="password" placeholder="Password" className="input input-bordered w-full" required />
 
-                                <button type="submit" className="w-full bg-purple-600 text-white py-2 rounded-md shadow hover:bg-purple-700 transition font-semibold cursor-pointer">
-                                    Register
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleGoogle}
-                                    className="w-full bg-red-500 text-white py-2 rounded-md shadow hover:bg-red-600 transition font-semibold cursor-pointer"
-                                >
+                                <button type="submit" className="btn btn-primary w-full">Register</button>
+                                <button type="button" onClick={handleGoogle} className="btn btn-error w-full text-white">
                                     Continue with Google
                                 </button>
                             </form>
