@@ -8,15 +8,16 @@ const ManageUsers = () => {
     const [search, setSearch] = useState('');
 
     const { data: users = [], isLoading } = useQuery({
-        queryKey: ['users', search],
+        queryKey: ['users', search || 'all'],
         queryFn: async () => {
             const url = search.length >= 2
-                ? `http://localhost:3000/users?search=${search}`
-                : `http://localhost:3000/users`;
+                ? `https://meal-nest-server-inky.vercel.app//users?search=${search}`
+                : `https://meal-nest-server-inky.vercel.app//users`;
             const res = await axios.get(url);
             return res.data;
         }
     });
+
 
     const handleMakeAdmin = (email) => {
         Swal.fire({
@@ -36,7 +37,7 @@ const ManageUsers = () => {
     };
 
     const { mutate, isLoading: isMutating } = useMutation({
-        mutationFn: (email) => axios.patch(`http://localhost:3000/users/${email}/make-admin`),
+        mutationFn: (email) => axios.patch(`https://meal-nest-server-inky.vercel.app//users/${email}/make-admin`), // Fixed
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
         }

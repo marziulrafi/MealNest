@@ -13,14 +13,14 @@ const MealDetails = () => {
     const { data: meal = {}, refetch } = useQuery({
         queryKey: ['meal', id],
         queryFn: async () => {
-            const res = await axios.get(`http://localhost:3000/meals/${id}`);
+            const res = await axios.get(`https://meal-nest-server-inky.vercel.app//meals/${id}`);
             return res.data;
         }
     });
 
     const handleLike = async () => {
         if (!user) return toast.error("Login required to like");
-        await axios.patch(`http://localhost:3000/meals/${id}`, {
+        await axios.patch(`https://meal-nest-server-inky.vercel.app//meals/${id}`, {
             likes: (meal.likes || 0) + 1
         });
         refetch();
@@ -33,7 +33,7 @@ const MealDetails = () => {
         }
 
         try {
-            await axios.post(`http://localhost:3000/serve-meals`, {
+            await axios.post(`https://meal-nest-server-inky.vercel.app//serve-meals`, {
                 mealId: id,
                 mealTitle: meal.title,
                 email: user.email,
@@ -58,7 +58,7 @@ const MealDetails = () => {
         };
 
         try {
-            const res = await axios.post(`http://localhost:3000/meals/${id}/review`, newReview);
+            const res = await axios.post(`https://meal-nest-server-inky.vercel.app//meals/${id}/review`, newReview);
             console.log("Review response:", res.data);
 
           

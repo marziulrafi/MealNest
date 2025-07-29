@@ -28,7 +28,7 @@ const CheckoutForm = () => {
         if (!amount) return;
 
         axios
-            .post('http://localhost:3000/create-payment-intent', { amount: amount * 100 })
+            .post('https://meal-nest-server-inky.vercel.app//create-payment-intent', { amount: amount * 100 })
             .then(res => {
                 setClientSecret(res.data.clientSecret);
             })
@@ -91,7 +91,7 @@ const CheckoutForm = () => {
             try {
                 const token = await user.getIdToken();
 
-                await axios.post('http://localhost:3000/payments', paymentData, {
+                await axios.post('https://meal-nest-server-inky.vercel.app//payments', paymentData, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

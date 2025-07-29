@@ -12,7 +12,7 @@ const MealsByCategory = () => {
     const { data: meals = [], isLoading } = useQuery({
         queryKey: ['meals-by-category'],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:3000/meals?sortBy=likes&limit=0')
+            const res = await axios.get('https://meal-nest-server-inky.vercel.app//meals?sortBy=likes&limit=0')
             return res.data
         }
     })
@@ -62,8 +62,11 @@ const MealsByCategory = () => {
                                         className="w-full h-40 object-cover rounded-lg mb-3"
                                     />
                                     <h4 className="font-bold text-lg text-purple-800">{meal.title}</h4>
-                                    <p className="text-gray-600 font-medium mb-3">
+                                    <p className="text-gray-600 font-medium mb-1">
                                         Price: ৳{meal.price}
+                                    </p>
+                                    <p className="text-gray-600 text-sm font-medium mb-3">
+                                        Rating: {meal.rating}
                                     </p>
                                     <button
                                         onClick={() => navigate(`/meals/${meal._id}`)}

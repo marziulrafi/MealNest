@@ -24,6 +24,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import PaymentHistory from '../student/PaymentHistory';
 import MyReviews from '../student/MyReviews';
+import NotFound from '../components/NotFound';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE);
 
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
                 path: '/checkout/success',
                 element: <Success />,
             },
+            {
+                path: '/*',
+                element: <NotFound />
+            }
         ],
     },
 

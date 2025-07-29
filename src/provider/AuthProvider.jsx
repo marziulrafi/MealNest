@@ -19,6 +19,7 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
     const [dbUser, setDbUser] = useState(null)
     const [role, setRole] = useState(null)
+    const [badge, setBadge] = useState(null)
 
     const createUser = (email, password) => {
         setLoading(true)
@@ -53,7 +54,7 @@ const AuthProvider = ({ children }) => {
     const fetchDbUser = async () => {
         try {
             const token = await auth.currentUser.getIdToken()
-            const res = await fetch('http://localhost:3000/users/me', {
+            const res = await fetch('https://meal-nest-server-inky.vercel.app//users/me', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -62,10 +63,12 @@ const AuthProvider = ({ children }) => {
             const data = await res.json()
             setDbUser(data)
             setRole(data?.role || null)
+            setBadge(data?.badge || null) // ✅ Set badge from DB
         } catch (err) {
             console.error('Error fetching dbUser:', err)
             setDbUser(null)
             setRole(null)
+            setBadge(null)
         }
     }
 
@@ -78,6 +81,7 @@ const AuthProvider = ({ children }) => {
             } else {
                 setDbUser(null)
                 setRole(null)
+                setBadge(null)
             }
         })
         return () => unsubscribe()
@@ -87,6 +91,7 @@ const AuthProvider = ({ children }) => {
         user,
         dbUser,
         role,
+        badge,           // ✅ Now available in context
         loading,
         createUser,
         loginUser,

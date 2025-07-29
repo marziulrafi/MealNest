@@ -9,13 +9,13 @@ const AllMeals = () => {
     const { data: meals = [], isLoading } = useQuery({
         queryKey: ['meals', 'all'],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:3000/meals?sortBy=likes&limit=0');
+            const res = await axios.get('https://meal-nest-server-inky.vercel.app//meals?sortBy=likes&limit=0');
             return res.data;
         }
     });
 
     const deleteMeal = useMutation({
-        mutationFn: id => axios.delete(`http://localhost:3000/meals/${id}`),
+        mutationFn: id => axios.delete(`https://meal-nest-server-inky.vercel.app//meals/${id}`),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ['meals', 'all'] });
             Swal.fire('Deleted!', 'The meal has been removed.', 'success');

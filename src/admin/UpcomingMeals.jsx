@@ -14,49 +14,46 @@ const UpcomingMeals = () => {
     const { data: meals = [], isLoading } = useQuery({
         queryKey: ['upcoming'],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:3000/upcoming-meals');
+            const res = await axios.get('https://meal-nest-server-inky.vercel.app//upcoming-meals');
             return res.data;
         }
     });
 
     const publishMut = useMutation({
         mutationFn: async (id) => {
-            const mealToPublish = meals.find(m => m._id === id);
-            if (!mealToPublish) {
-                toast.error('Meal not found');
-                return;
-            }
-
-            const publishData = {
-                title: mealToPublish.title,
-                description: mealToPublish.description,
-                image: mealToPublish.image,
-                category: mealToPublish.category,
-                ingredients: mealToPublish.ingredients,
-                likes: mealToPublish.likes
-            };
-
-            await axios.post(`http://localhost:3000/meals`, publishData);
-            await axios.delete(`http://localhost:3000/upcoming-meals/${id}`);
+            await axios.post(`https://meal-nest-server-inky.vercel.app//upcoming-meals/publish/${id}`);
         },
         onSuccess: () => {
             toast.success('✅ Meal published successfully!');
             queryClient.invalidateQueries({ queryKey: ['upcoming'] });
+        },
+        onError: () => {
+            toast.error('❌ Failed to publish meal');
         }
     });
 
+
     const likeMut = useMutation({
         mutationFn: (id) =>
-            axios.patch(`http://localhost:3000/upcoming-meals/like/${id}`, {
-                email: user?.email
+            axios.patch(`https://meal-nest-server-inky.vercel.app//upcoming-meals/like/${id}`, {
+                email: user?.email,
             }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['upcoming'] });
+            toast.success('❤️ Liked!');
         },
-        onError: () => toast.error('❌ Already liked or not authorized.')
+        onError: (error) => {
+            const msg = error?.response?.data?.error || '❌ Something went wrong.';
+            toast.error(msg);
+        },
     });
 
-    const isPremium = ['silver', 'gold', 'platinum'].includes(badge?.toLowerCase());
+
+    const isPremium = badge && ['silver', 'gold', 'platinum'].includes(badge.toLowerCase());
+
+   
+
+
 
     // --- Admin View ---
     if (role === 'admin') {
@@ -100,7 +97,7 @@ const UpcomingMeals = () => {
                                             <td className="px-4 py-2 text-center">
                                                 <button
                                                     onClick={() => publishMut.mutate(meal._id)}
-                                                    className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 transition-all"
+                                                    className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 transition-all cursor-pointer"
                                                 >
                                                     Publish
                                                 </button>
@@ -115,13 +112,13 @@ const UpcomingMeals = () => {
                 <AnimatePresence>
                     {showAdd && (
                         <motion.div
-                            className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+                            className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4 sm:p-6"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                         >
                             <motion.div
-                                className="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[600px] relative"
+                                className="bg-white w-full max-w-lg md:max-w-xl lg:max-w-2xl rounded-lg shadow-lg relative max-h-[90vh] overflow-y-auto"
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
@@ -129,15 +126,18 @@ const UpcomingMeals = () => {
                             >
                                 <button
                                     onClick={() => setShowAdd(false)}
-                                    className="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-xl"
+                                    className="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-2xl font-bold"
                                 >
                                     &times;
                                 </button>
-                                <AddUpcomingMealForm onClose={() => setShowAdd(false)} />
+                                <div className="p-5">
+                                    <AddUpcomingMealForm onClose={() => setShowAdd(false)} />
+                                </div>
                             </motion.div>
                         </motion.div>
                     )}
                 </AnimatePresence>
+
             </div>
         );
     }
@@ -166,19 +166,24 @@ const UpcomingMeals = () => {
                                     {isPremium ? (
                                         <button
                                             onClick={() => likeMut.mutate(meal._id)}
-                                            className="text-sm text-white bg-purple-600 px-3 py-1 rounded hover:bg-purple-700"
+                                            className="text-sm text-white bg-purple-500 px-3 py-1 rounded hover:bg-purple-600 cursor-pointer"
+                                            disabled={meal.likedBy?.includes(user?.email)}
                                         >
-                                            ❤️ Like
+                                            {meal.likedBy?.includes(user?.email) ? '❤️ Liked' : '❤️ Like'}
                                         </button>
                                     ) : (
                                         <button
-                                            onClick={() => toast.error('❌ Only Silver, Gold, or Platinum users can like')}
+                                            onClick={() =>
+                                                toast.error('❌ Only Silver, Gold, or Platinum users can like')
+                                            }
                                             className="text-sm bg-gray-300 text-gray-600 px-3 py-1 rounded cursor-not-allowed"
                                             disabled
                                         >
                                             ❤️ Like
                                         </button>
                                     )}
+
+
                                 </div>
                             </div>
                         </div>

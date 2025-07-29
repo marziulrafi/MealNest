@@ -4,18 +4,76 @@ import axios from 'axios';
 import { AuthContext } from '../provider/AuthProvider';
 import { Link } from 'react-router';
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 const MyReviews = () => {
     const { user } = useContext(AuthContext);
 
-    const { data: reviews = [], isLoading } = useQuery({
+    const { data: reviews = [], isLoading, refetch } = useQuery({
         queryKey: ['my-reviews', user?.email],
         enabled: !!user?.email,
         queryFn: async () => {
-            const res = await axios.get(`http://localhost:3000/reviews?email=${user.email}`);
+            const res = await axios.get(`https://meal-nest-server-inky.vercel.app//reviews?email=${user.email}`);
             return res.data;
         },
     });
+
+
+    const handleUpdateReview = async (id, currentContent) => {
+        const { value: newContent } = await Swal.fire({
+            title: 'Edit your review',
+            input: 'textarea',
+            inputLabel: 'Update Review',
+            inputValue: currentContent,
+            showCancelButton: true,
+            confirmButtonText: 'Update',
+            inputValidator: (value) => {
+                if (!value) return 'Review cannot be empty!';
+            },
+        });
+
+        if (newContent) {
+            try {
+                const res = await axios.patch(`https://meal-nest-server-inky.vercel.app//reviews/${id}`, { content: newContent });
+                if (res.data.modifiedCount > 0) {
+                    Swal.fire('Updated!', 'Your review has been updated.', 'success');
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Error', 'Could not update the review.', 'error');
+            }
+        }
+    };
+
+
+    const handleDeleteReview = async (id) => {
+        const confirm = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'This review will be permanently deleted!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+        });
+
+        if (confirm.isConfirmed) {
+            try {
+                const res = await axios.delete(`https://meal-nest-server-inky.vercel.app//reviews/${id}`);
+                console.log(res.data); 
+                if (res.data.deletedCount > 0) {
+                    Swal.fire('Deleted!', 'Your review has been deleted.', 'success');
+                    refetch();
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Error', 'Could not delete the review.', 'error');
+            }
+        }
+    };
+
+
+
 
     if (isLoading) {
         return <p className="text-center text-lg font-semibold text-gray-600">Loading your reviews...</p>;
@@ -52,12 +110,21 @@ const MyReviews = () => {
                                                 <FaEye />
                                             </button>
                                         </Link>
-                                        <button className="text-green-600 hover:text-green-800" title="Edit Review">
+                                        <button
+                                            className="text-green-600 hover:text-green-800"
+                                            title="Edit Review"
+                                            onClick={() => handleUpdateReview(review._id, review.content)}
+                                        >
                                             <FaEdit />
                                         </button>
-                                        <button className="text-red-600 hover:text-red-800" title="Delete Review">
+                                        <button
+                                            className="text-red-600 hover:text-red-800"
+                                            title="Delete Review"
+                                            onClick={() => handleDeleteReview(review._id)}
+                                        >
                                             <FaTrash />
                                         </button>
+
                                     </td>
                                 </tr>
                             ))}

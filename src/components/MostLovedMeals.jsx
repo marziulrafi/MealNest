@@ -6,7 +6,7 @@ const MostLovedMeals = () => {
     const [meals, setMeals] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/meals')
+        axios.get('https://meal-nest-server-inky.vercel.app//meals')
             .then(res => {
                 const topMeals = res.data.sort((a, b) => b.likes - a.likes).slice(0, 6);
                 setMeals(topMeals);

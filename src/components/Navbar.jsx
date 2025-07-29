@@ -69,7 +69,7 @@ const Navbar = () => {
                                     <NavLink to={role === 'admin' ? '/dashboard/admin/profile' : '/dashboard/profile'} className="hover:text-purple-500">
                                         Dashboard
                                     </NavLink>
-                                    <button onClick={logoutUser} className="text-red-500 hover:underline flex items-center gap-1 mt-1">
+                                    <button onClick={logoutUser} className="text-red-500 cursor-pointer hover:underline flex items-center gap-1 mt-1">
                                         <LogOut size={16} /> Logout
                                     </button>
                                 </div>
@@ -100,7 +100,7 @@ const Navbar = () => {
                             <NavLink to={role === 'admin' ? '/dashboard/admin/profile' : '/dashboard/profile'}>
                                 Dashboard
                             </NavLink>
-                            <button onClick={logoutUser} className="text-red-500 text-left">Logout</button>
+                            <button onClick={logoutUser} className="text-red-500 text-left cursor-pointer">Logout</button>
                         </div>
                     )}
                 </div>

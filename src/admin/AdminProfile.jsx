@@ -11,7 +11,7 @@ const AdminProfile = () => {
         queryKey: ['admin-meals', user?.email],
         enabled: !!user?.email,
         queryFn: async () => {
-            const res = await axios.get(`http://localhost:3000/admin/meals-count?email=${user.email}`)
+            const res = await axios.get(`https://meal-nest-server-inky.vercel.app//admin/meals-count?email=${user.email}`)
             return res.data.count
         }
     })

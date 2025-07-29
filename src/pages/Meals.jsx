@@ -31,7 +31,7 @@ const Meals = () => {
             ...(maxPrice && { max: maxPrice }),
         };
 
-        const res = await axios.get('http://localhost:3000/meals', { params });
+        const res = await axios.get('https://meal-nest-server-inky.vercel.app//meals', { params });
         const newMeals = res.data;
 
         const uniqueMeals = newMeals.filter(
@@ -60,7 +60,7 @@ const Meals = () => {
                 ...(minPrice && { min: minPrice }),
                 ...(maxPrice && { max: maxPrice }),
             };
-            const res = await axios.get('http://localhost:3000/meals', { params });
+            const res = await axios.get('https://meal-nest-server-inky.vercel.app//meals', { params });
             setMeals(res.data);
             setHasMore(res.data.length === PAGE_SIZE);
             setPage(1);
@@ -81,8 +81,8 @@ const Meals = () => {
                 />
                 <select className="border px-3 py-2 rounded" value={category} onChange={(e) => setCategory(e.target.value)}>
                     <option value="">All Categories</option>
-                    <option value="Lunch">Lunch</option>
                     <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
                     <option value="Dinner">Dinner</option>
                 </select>
                 <input

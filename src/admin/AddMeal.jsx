@@ -32,10 +32,10 @@ const AddMeal = () => {
                 price: parseFloat(data.price),
                 distributorName: user.displayName,
                 distributorEmail: user.email,
-                // ⛔ No need to send postTime from frontend
+                
             };
 
-            await axios.post('http://localhost:3000/admin/meals', mealData);
+            await axios.post('https://meal-nest-server-inky.vercel.app//admin/meals', mealData);
             toast.success('🍽️ Meal added successfully!');
             reset();
         } catch (err) {

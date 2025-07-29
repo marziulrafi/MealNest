@@ -10,13 +10,13 @@ const RequestedMeals = () => {
         queryKey: ['requested-meals', user?.email],
         enabled: !!user?.email,
         queryFn: async () => {
-            const res = await axios.get(`http://localhost:3000/serve-meals?email=${user.email}`);
+            const res = await axios.get(`https://meal-nest-server-inky.vercel.app//serve-meals?email=${user.email}`);
             return res.data;
         }
     });
 
     const handleCancel = async (id) => {
-        await axios.delete(`http://localhost:3000/serve-meals/${id}`);
+        await axios.delete(`https://meal-nest-server-inky.vercel.app//serve-meals/${id}`);
         refetch();
     };
 
