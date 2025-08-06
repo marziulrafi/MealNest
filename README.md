@@ -1,12 +1,41 @@
-# React + Vite
+# 🍽️ MealNest – Online Meal Subscription Platform
+MealNest is a full-stack web application for subscribing to meals, posting food reviews, managing user roles, and tracking orders. Admins can add or remove meals, manage users, and view all orders, while users can browse, review, and subscribe to meals.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+🔗 **Live Site URL:** [MealNest Live Demo](https://marziul-mealnest.web.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ✨ Features
+
+- ✅ **User Registration & Login:** Secure authentication with Firebase.
+- 👨‍🍳 **Role-Based Dashboard:** Separate dashboards for Admins, Chefs, and Users.
+- 📦 **Meal Subscription System:** Users can subscribe to available meals with real-time status updates.
+- 📝 **Food Reviews:** Users can post, view, and delete their reviews on meals.
+- 🔍 **Search Functionality:** Server-side search for users by name or email.
+- 📊 **User Management:** Admins can view all users and promote them to Admin or Chef.
+- 🍛 **Chef Meal Management:** Chefs can add, edit, or remove meals they created.
+- 💼 **Order Tracking:** Admins can monitor all user subscriptions and orders.
+- 📈 **Analytics Support:** Dashboard shows total users, meals, and subscriptions.
+- 🎨 **Responsive Design:** Clean, modern UI with Tailwind CSS.
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend:**
+- React.js
+- React Router
+- Tailwind CSS
+- Axios
+- DaisyUI
+
+**Backend:**
+- Node.js
+- Express.js
+- MongoDB
+- Firebase Admin SDK (for server-side auth)
+
+---
+
