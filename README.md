@@ -4,6 +4,8 @@ MealNest is a full-stack web application for subscribing to meals, posting food 
 
 🔗 **Live Site URL:** [MealNest Live Demo](https://marziul-mealnest.web.app/)
 
+🔗 **Server Side Repository:** [MealNest Server Side](https://github.com/marziulrafi/MealNest-Server)
+
 
 ---
 
@@ -14,8 +16,8 @@ MealNest is a full-stack web application for subscribing to meals, posting food 
 - 📦 **Meal Subscription System:** Users can subscribe to available meals with real-time status updates.
 - 📝 **Food Reviews:** Users can post, view, and delete their reviews on meals.
 - 🔍 **Search Functionality:** Server-side search for users by name or email.
-- 📊 **User Management:** Admins can view all users and promote them to Admin or Chef.
-- 🍛 **Chef Meal Management:** Chefs can add, edit, or remove meals they created.
+- 📊 **User Management:** Admins can view all users and promote them to Admin.
+- 🍛 **Admin Meal Management:** Admins can add, edit, or remove meals they created.
 - 💼 **Order Tracking:** Admins can monitor all user subscriptions and orders.
 - 📈 **Analytics Support:** Dashboard shows total users, meals, and subscriptions.
 - 🎨 **Responsive Design:** Clean, modern UI with Tailwind CSS.
