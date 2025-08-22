@@ -38,7 +38,7 @@ const Authentication = () => {
 
     const saveUserToDB = async (user) => {
         try {
-            const res = await fetch('https://meal-nest-server-inky.vercel.app//users', {
+            const res = await fetch('https://meal-nest-server-inky.vercel.app/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(user),
@@ -113,7 +113,7 @@ const Authentication = () => {
     const updateUser = async (email, updates) => {
         if (!auth.currentUser) throw new Error('Not authenticated')
         const idToken = await auth.currentUser.getIdToken()
-        const res = await fetch(`https://meal-nest-server-inky.vercel.app//users/${email}`, {
+        const res = await fetch(`https://meal-nest-server-inky.vercel.app/users/${email}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

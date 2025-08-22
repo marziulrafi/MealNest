@@ -14,14 +14,14 @@ const UpcomingMeals = () => {
     const { data: meals = [], isLoading } = useQuery({
         queryKey: ['upcoming'],
         queryFn: async () => {
-            const res = await axios.get('https://meal-nest-server-inky.vercel.app//upcoming-meals');
+            const res = await axios.get('https://meal-nest-server-inky.vercel.app/upcoming-meals');
             return res.data;
         }
     });
 
     const publishMut = useMutation({
         mutationFn: async (id) => {
-            await axios.post(`https://meal-nest-server-inky.vercel.app//upcoming-meals/publish/${id}`);
+            await axios.post(`https://meal-nest-server-inky.vercel.app/upcoming-meals/publish/${id}`);
         },
         onSuccess: () => {
             toast.success('✅ Meal published successfully!');
@@ -35,7 +35,7 @@ const UpcomingMeals = () => {
 
     const likeMut = useMutation({
         mutationFn: (id) =>
-            axios.patch(`https://meal-nest-server-inky.vercel.app//upcoming-meals/like/${id}`, {
+            axios.patch(`https://meal-nest-server-inky.vercel.app/upcoming-meals/like/${id}`, {
                 email: user?.email,
             }),
         onSuccess: () => {

@@ -11,7 +11,7 @@ const AllReviews = () => {
     const { data: reviews = [], refetch } = useQuery({
         queryKey: ['all-reviews'],
         queryFn: async () => {
-            const res = await axios.get('https://meal-nest-server-inky.vercel.app//reviews');
+            const res = await axios.get('https://meal-nest-server-inky.vercel.app/reviews');
             return res.data;
         }
     });
@@ -25,7 +25,7 @@ const AllReviews = () => {
 
             await Promise.all(uniqueMealIds.map(async (id) => {
                 try {
-                    const res = await axios.get(`https://meal-nest-server-inky.vercel.app//meals/${id}`);
+                    const res = await axios.get(`https://meal-nest-server-inky.vercel.app/meals/${id}`);
                     newMealMap[id] = res.data;
                 } catch (e) {
                     newMealMap[id] = null;
@@ -53,7 +53,7 @@ const AllReviews = () => {
 
         if (confirm.isConfirmed)
             try {
-                await axios.delete(`https://meal-nest-server-inky.vercel.app//reviews/${id}`);
+                await axios.delete(`https://meal-nest-server-inky.vercel.app/reviews/${id}`);
                 toast.success('✅ Review deleted');
                 refetch();
             } catch (err) {

@@ -38,7 +38,7 @@ const AddUpcomingMealForm = ({ onClose }) => {
                 likes: 0,
             };
 
-            await axios.post('https://meal-nest-server-inky.vercel.app//upcoming-meals', mealData);
+            await axios.post('https://meal-nest-server-inky.vercel.app/upcoming-meals', mealData);
             toast.success('✅ Upcoming meal added!');
             reset();
             onClose();

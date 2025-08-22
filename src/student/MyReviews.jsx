@@ -13,7 +13,7 @@ const MyReviews = () => {
         queryKey: ['my-reviews', user?.email],
         enabled: !!user?.email,
         queryFn: async () => {
-            const res = await axios.get(`https://meal-nest-server-inky.vercel.app//reviews?email=${user.email}`);
+            const res = await axios.get(`https://meal-nest-server-inky.vercel.app/reviews?email=${user.email}`);
             return res.data;
         },
     });
@@ -34,7 +34,7 @@ const MyReviews = () => {
 
         if (newContent) {
             try {
-                const res = await axios.patch(`https://meal-nest-server-inky.vercel.app//reviews/${id}`, { content: newContent });
+                const res = await axios.patch(`https://meal-nest-server-inky.vercel.app/reviews/${id}`, { content: newContent });
                 if (res.data.modifiedCount > 0) {
                     Swal.fire('Updated!', 'Your review has been updated.', 'success');
                 }
@@ -59,7 +59,7 @@ const MyReviews = () => {
 
         if (confirm.isConfirmed) {
             try {
-                const res = await axios.delete(`https://meal-nest-server-inky.vercel.app//reviews/${id}`);
+                const res = await axios.delete(`https://meal-nest-server-inky.vercel.app/reviews/${id}`);
                 console.log(res.data); 
                 if (res.data.deletedCount > 0) {
                     Swal.fire('Deleted!', 'Your review has been deleted.', 'success');

@@ -31,7 +31,7 @@ const Meals = () => {
             ...(maxPrice && { max: maxPrice }),
         };
 
-        const res = await axios.get('https://meal-nest-server-inky.vercel.app//meals', { params });
+        const res = await axios.get('https://meal-nest-server-inky.vercel.app/meals', { params });
         const newMeals = res.data;
 
         const uniqueMeals = newMeals.filter(
@@ -60,7 +60,7 @@ const Meals = () => {
                 ...(minPrice && { min: minPrice }),
                 ...(maxPrice && { max: maxPrice }),
             };
-            const res = await axios.get('https://meal-nest-server-inky.vercel.app//meals', { params });
+            const res = await axios.get('https://meal-nest-server-inky.vercel.app/meals', { params });
             setMeals(res.data);
             setHasMore(res.data.length === PAGE_SIZE);
             setPage(1);

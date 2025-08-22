@@ -8,14 +8,14 @@ const ServeMeal = () => {
     const { data: requests = [], isLoading } = useQuery({
         queryKey: ['requests'],
         queryFn: async () => {
-            const res = await axios.get('https://meal-nest-server-inky.vercel.app//serve-meals');
+            const res = await axios.get('https://meal-nest-server-inky.vercel.app/serve-meals');
             return res.data;
         }
     });
 
     // ✅ v5-compliant useMutation
     const serveMut = useMutation({
-        mutationFn: id => axios.patch(`https://meal-nest-server-inky.vercel.app//serve-meals/${id}`),
+        mutationFn: id => axios.patch(`https://meal-nest-server-inky.vercel.app/serve-meals/${id}`),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ['requests'] });
         }

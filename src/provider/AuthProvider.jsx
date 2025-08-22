@@ -54,7 +54,7 @@ const AuthProvider = ({ children }) => {
     const fetchDbUser = async () => {
         try {
             const token = await auth.currentUser.getIdToken()
-            const res = await fetch('https://meal-nest-server-inky.vercel.app//users/me', {
+            const res = await fetch('https://meal-nest-server-inky.vercel.app/users/me', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

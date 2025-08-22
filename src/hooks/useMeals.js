@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const fetchMeals = async ({ pageParam = 1, queryKey }) => {
     const [_key, filters] = queryKey
-    const res = await axios.get(`https://meal-nest-server-inky.vercel.app//meals`, {
+    const res = await axios.get(`https://meal-nest-server-inky.vercel.app/meals`, {
         params: { ...filters, page: pageParam }
     })
     return res.data

@@ -1,8 +1,7 @@
 import { NavLink, Outlet } from 'react-router'
 import {
     FaUserCircle, FaUsers, FaUtensils, FaClipboardList,
-    FaStar, FaServicestack, FaRegClock,
-    FaHome
+    FaStar, FaServicestack, FaRegClock, FaHome, FaChartPie
 } from 'react-icons/fa'
 
 const navItems = [

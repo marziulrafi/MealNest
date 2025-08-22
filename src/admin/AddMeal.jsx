@@ -35,7 +35,7 @@ const AddMeal = () => {
                 
             };
 
-            await axios.post('https://meal-nest-server-inky.vercel.app//admin/meals', mealData);
+            await axios.post('https://meal-nest-server-inky.vercel.app/admin/meals', mealData);
             toast.success('🍽️ Meal added successfully!');
             reset();
         } catch (err) {

@@ -11,8 +11,8 @@ const ManageUsers = () => {
         queryKey: ['users', search || 'all'],
         queryFn: async () => {
             const url = search.length >= 2
-                ? `https://meal-nest-server-inky.vercel.app//users?search=${search}`
-                : `https://meal-nest-server-inky.vercel.app//users`;
+                ? `https://meal-nest-server-inky.vercel.app/users?search=${search}`
+                : `https://meal-nest-server-inky.vercel.app/users`;
             const res = await axios.get(url);
             return res.data;
         }
@@ -37,7 +37,7 @@ const ManageUsers = () => {
     };
 
     const { mutate, isLoading: isMutating } = useMutation({
-        mutationFn: (email) => axios.patch(`https://meal-nest-server-inky.vercel.app//users/${email}/make-admin`), // Fixed
+        mutationFn: (email) => axios.patch(`https://meal-nest-server-inky.vercel.app/users/${email}/make-admin`), // Fixed
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
         }

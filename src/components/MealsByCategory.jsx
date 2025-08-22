@@ -12,7 +12,7 @@ const MealsByCategory = () => {
     const { data: meals = [], isLoading } = useQuery({
         queryKey: ['meals-by-category'],
         queryFn: async () => {
-            const res = await axios.get('https://meal-nest-server-inky.vercel.app//meals?sortBy=likes&limit=0')
+            const res = await axios.get('https://meal-nest-server-inky.vercel.app/meals?sortBy=likes&limit=0')
             return res.data
         }
     })
